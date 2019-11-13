@@ -36,19 +36,22 @@ const serverHandle = (req,res)=>{
 
   getPostData(req).then(postData=>{
     req.body = postData;
-
     const blogData = blogRouter(req,res);
     if(blogData){
-      return res.end(
-        JSON.stringify(blogData)
-      )
+      return blogData.then(result=>{
+        return res.end(
+          JSON.stringify(result)
+        )
+      })
     }
 
-    const userData = userRouter(req,res);
-    if(userData){
-      return res.end(
-        JSON.stringify(userData)
-      )
+    const userResult = userRouter(req,res);
+    if(userResult){
+      userResult.then(userData=>{
+        return res.end(
+          JSON.stringify(userData)
+        )
+      })
     }
 
     //返回404
